@@ -2,7 +2,7 @@
 
 # from odoo import models, fields, api
 
-ass demo_module(models.Model):
+# class demo_module(models.Model):
 #     _name = 'demo_module.demo_module'
 #     _description = 'demo_module.demo_module'
 
