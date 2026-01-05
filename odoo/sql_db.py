@@ -403,7 +403,14 @@ class Cursor(BaseCursor):
         del self._obj
 
         # Clean the underlying connection, and run rollback hooks.
-        self.rollback()
+        try:
+            self.rollback()
+        except (psycopg2.InterfaceError, psycopg2.OperationalError) as e:
+            # Connection already closed, skip rollback
+            if 'connection already closed' in str(e).lower() or (hasattr(self, '_cnx') and self._cnx.closed):
+                _logger.debug('Skipping rollback on already closed connection in _close')
+            else:
+                raise
 
         self._closed = True
 
@@ -482,7 +489,15 @@ class Cursor(BaseCursor):
         self.clear()
         self.postcommit.clear()
         self.prerollback.run()
-        result = self._cnx.rollback()
+        try:
+            result = self._cnx.rollback()
+        except (psycopg2.InterfaceError, psycopg2.OperationalError) as e:
+            # Connection already closed, skip rollback
+            if 'connection already closed' in str(e).lower() or self._cnx.closed:
+                _logger.debug('Skipping rollback on already closed connection')
+                result = None
+            else:
+                raise
         self._now = None
         self.postrollback.run()
         return result

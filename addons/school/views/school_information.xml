@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Root menu -->
+        <menuitem id="school_menu_root"
+                  name="School"
+                  sequence="1"/>
+
+        <!-- Action -->
+        <record id="actions_school_information" model="ir.actions.act_window">
+            <field name="name">School Information</field>
+            <field name="res_model">school.information</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="school_menu"
+                  name="School Information"
+                  parent="school_menu_root"
+                  action="actions_school_information"
+                  sequence="2"/>
+
+        <record id="school_information_list_view" model="ir.ui.view">
+            <field name="name">School Information List</field>
+            <field name="model">school.information</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách trường">
+                    <field name="name" optional="show"/>
+                    <field name="type" optional="show"/>
+                    <field name="email" optional="show"/>
+                    <field name="address" optional="show"/>
+                    <field name="hasOnlineClass" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record id="school_information_form_view" model="ir.ui.view">
+            <field name="name">school.information.form</field>
+            <field name="model">school.information</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="type"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                        </group>
+                        <group>
+                            <field name="hasOnlineClass"/>
+                            <field name="document" filename="document_name"/>
+                            <field name="document_name" invisible="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

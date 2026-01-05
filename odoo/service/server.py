@@ -19,6 +19,7 @@ import unittest
 from itertools import chain
 
 import psutil
+import psycopg2
 import werkzeug.serving
 from werkzeug.debug import DebuggedApplication
 
@@ -440,9 +441,20 @@ class ThreadedServer(CommonServer):
             cr.commit()
 
             while True:
-                select.select([pg_conn], [], [], SLEEP_INTERVAL + number)
-                time.sleep(number / 100)
-                pg_conn.poll()
+                try:
+                    select.select([pg_conn], [], [], SLEEP_INTERVAL + number)
+                    time.sleep(number / 100)
+                    if not pg_conn.closed:
+                        pg_conn.poll()
+                except (psycopg2.InterfaceError, psycopg2.OperationalError) as e:
+                    if 'connection already closed' in str(e).lower() or pg_conn.closed:
+                        _logger.warning('cron%d: PostgreSQL connection closed, will retry on next iteration', number)
+                        # Connection closed, skip poll and continue to next iteration
+                        # The connection pool will handle reconnection on next cursor creation
+                        time.sleep(SLEEP_INTERVAL)
+                        continue
+                    else:
+                        raise
 
                 registries = odoo.modules.registry.Registry.registries
                 _logger.debug('cron%d polling for jobs', number)
@@ -1128,7 +1140,16 @@ class WorkerCron(Worker):
                 select.select([self.wakeup_fd_r, self.dbcursor._cnx], [], [], interval)
                 # clear pg_conn/wakeup pipe if we were interrupted
                 time.sleep(self.pid / 100 % .1)
-                self.dbcursor._cnx.poll()
+                try:
+                    if not self.dbcursor._cnx.closed:
+                        self.dbcursor._cnx.poll()
+                except (psycopg2.InterfaceError, psycopg2.OperationalError) as e:
+                    if 'connection already closed' in str(e).lower() or self.dbcursor._cnx.closed:
+                        _logger.warning('WorkerCron (%s): PostgreSQL connection closed, will retry on next iteration', self.pid)
+                        # Connection closed, skip poll and continue
+                        # The connection pool will handle reconnection on next cursor creation
+                    else:
+                        raise
                 empty_pipe(self.wakeup_fd_r)
             except select.error as e:
                 if e.args[0] != errno.EINTR:
