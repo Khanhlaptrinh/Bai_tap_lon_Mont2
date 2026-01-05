@@ -47,7 +47,7 @@ Một số project sinh viên đã thực hiện:
 
 #### 4.1.1. Tải project.
 ```
-git clone https://github.com/Khanhlaptrinh/Bai_tap_lon_Mont2.git
+git clone https://github.com/Khanhlaptrinh/16-06-N6.git
 ```
 #### 4.1.2. Cài đặt các thư viện cần thiết
 Người sử dụng thực thi các lệnh sau đề cài đặt các thư viện cần thiết
