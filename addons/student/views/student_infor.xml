@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Action -->
+        <record id="actions_student_information" model="ir.actions.act_window">
+            <field name="name">Student Information Action</field>
+            <field name="res_model">student.information</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="student_information_menu"
+                  name="Student Information"
+                  parent="school.school_menu_root"
+                  action="actions_student_information"
+                  sequence="3"/>
+
+        <record id="student_information_list_view" model="ir.ui.view">
+            <field name="name">Student Information List</field>
+            <field name="model">student.information</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách học sinh">
+                    <field name="class_id" optional="show"/>
+                    <field name="name" optional="show"/>
+                    <field name="birthday" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record id="student_information_form_view" model="ir.ui.view">
+            <field name="name">student.information.form</field>
+            <field name="model">student.information</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="class_id"/>
+                            <field name="name"/>
+                            <field name="birthday"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

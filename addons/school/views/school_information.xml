@@ -53,6 +53,25 @@
                             <field name="document" filename="document_name"/>
                             <field name="document_name" invisible="1"/>
                         </group>
+                        <group string="Danh sách lớp học">
+                            <field name="class_list" nolabel="1" context="{'default_school_id': id}">
+                                <tree string="Danh sách lớp học" editable="bottom" create="1" delete="1">
+                                    <field name="name" required="1"/>
+                                    <field name="grade"/>
+                                    <field name="mainTeacher"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <field name="name" required="1"/>
+                                            <field name="grade"/>
+                                            <field name="mainTeacher"/>
+                                            <field name="school_id" invisible="1"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </group>
                     </sheet>
                 </form>
             </field>

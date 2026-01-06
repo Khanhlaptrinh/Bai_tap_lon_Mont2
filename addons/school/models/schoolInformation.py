@@ -19,3 +19,21 @@ class SchoolInformation(models.Model):
     document = fields.Binary(string="Tài liệu trường")
     document_name = fields.Char(string="Tên tài liệu")
 
+    class_list = fields.One2many(
+        "class.information", 
+        "school_id", 
+        string="Danh sách lớp học"
+    )
+
+    def action_view_classes(self):
+        """Action to view all classes for this school"""
+        self.ensure_one()
+        return {
+            'name': 'Danh sách lớp học',
+            'type': 'ir.actions.act_window',
+            'res_model': 'class.information',
+            'view_mode': 'tree,form',
+            'domain': [('school_id', '=', self.id)],
+            'context': {'default_school_id': self.id},
+        }
+

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="class_information_menu"
+                  name="Class Information"
+                  parent="school.school_menu_root"
+                  action="actions_class_information"
+                  sequence="2"
+        />
+
+        <!-- Action -->
+        <record id="actions_class_information" model="ir.actions.act_window">
+            <field name="name">Class Information Actions</field>
+            <field name="res_model">class.information</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="class_information_list_view" model="ir.ui.view">
+            <field name="name">Class Information List</field>
+            <field name="model">class.information</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách lớp">
+                    <field name="school_id" optional="show"/>
+                    <field name="name" optional="show"/>
+                    <field name="grade" optional="show"/>
+                    <field name="mainTeacher" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record id="class_information_form_view" model="ir.ui.view">
+            <field name="name">class.information.form</field>
+            <field name="model">class.information</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="school_id"/>
+                            <field name="grade"/>
+                            <field name="mainTeacher"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Shool Management",
+    'name': "Class Managemnet",
+
     'summary': """
-        Long description of module's purpose
-    """,
+        Short (1 phrase/line) summary of the module's purpose, used as
+        subtitle on modules listing or apps.openerp.com""",
 
     'description': """
         Long description of module's purpose
@@ -19,17 +20,17 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    # Note: One2many can use string reference, so we don't need 'class' dependency
+    # Note: Many2one can use string reference, so we don't need 'school' dependency
     # This avoids circular dependency - Odoo will resolve the reference after both models are loaded
     'depends': ['base'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/school_information.xml',
+        'views/class_information.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
-        'demo/demo.xml',
+        # 'demo/demo.xml',
     ],
 }
